@@ -1,0 +1,48 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+<div class="max-w-md mx-auto bg-gray-400 rounded-xl p-6 mt-10">
+  <h2 class="text-2xl font-semibold text-center text-white mb-4">Create an account</h2>
+  <form method="post" class="space-y-4">
+    {% csrf_token %}
+
+    {% if form.non_field_errors %}
+      <div class="p-3 bg-red-500 text-white rounded-xl">
+        {{ form.non_field_errors }}
+      </div>
+    {% endif %}
+
+    <div>
+      <label class="block text-white mb-1" for="id_username">Username</label>
+      <input type="text" name="username" autofocus required id="id_username" value="{{ form.username.value|default:'' }}" class="w-full py-3 px-4 rounded-xl bg-gray-700 text-white" />
+      {% if form.username.errors %}
+        <p class="text-sm text-red-200 mt-1">{{ form.username.errors.0 }}</p>
+      {% endif %}
+    </div>
+
+    <div>
+      <label class="block text-white mb-1" for="id_password1">Password</label>
+      <input type="password" name="password1" required id="id_password1" class="w-full py-3 px-4 rounded-xl bg-gray-700 text-white" />
+      {% if form.password1.errors %}
+        <p class="text-sm text-red-200 mt-1">{{ form.password1.errors.0 }}</p>
+      {% endif %}
+    </div>
+
+    <div>
+      <label class="block text-white mb-1" for="id_password2">Confirm password</label>
+      <input type="password" name="password2" required id="id_password2" class="w-full py-3 px-4 rounded-xl bg-gray-700 text-white" />
+      {% if form.password2.errors %}
+        <p class="text-sm text-red-200 mt-1">{{ form.password2.errors.0 }}</p>
+      {% endif %}
+    </div>
+
+    <button type="submit" class="w-full py-3 bg-emerald-500 hover:bg-emerald-700 text-white rounded-xl">Sign up</button>
+  </form>
+
+  <p class="text-center text-white mt-4">
+    Already have an account?
+    <a href="{% url 'login' %}" class="text-blue-800 underline">Log in</a>
+  </p>
+</div>
+{% endblock %}
+

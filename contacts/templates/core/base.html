@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Contact Manager</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  </head>
+  <body class="bg-gray-200">
+    <nav class="px-6 py-4 bg-gray-900 flex justify-between items-center">
+      <h1 class="text-2xl">
+        <a href="{% url 'frontpage' %}" class="text-white hover:text-gray-500">
+          Contact Manager
+        </a>
+      </h1>
+      <div class="flex items-center gap-3">
+        {% if user.is_authenticated %}
+          <span class="text-white">Hi, {{ user.username }}</span>
+          <a href="{% url 'add_contact' %}" class="px-2 py-1 bg-emerald-500 hover:bg-emerald-700 text-white text-xl rounded-xl">Add Contact</a>
+          <form method="post" action="{% url 'logout' %}" class="inline">
+            {% csrf_token %}
+            <button type="submit" class="px-2 py-1 bg-gray-700 hover:bg-gray-800 text-white text-xl rounded-xl">Log out</button>
+          </form>
+        {% else %}
+          <a href="{% url 'login' %}" class="px-2 py-1 bg-emerald-500 hover:bg-emerald-700 text-white text-xl rounded-xl">Log in</a>
+          <a href="{% url 'signup' %}" class="px-2 py-1 bg-blue-500 hover:bg-blue-700 text-white text-xl rounded-xl">Sign up</a>
+        {% endif %}
+      </div>
+    </nav>
+    <div class= px-6 py-4>
+        {% block content %}
+        {% endblock %}
+    </div>
+  </body>
+</html>

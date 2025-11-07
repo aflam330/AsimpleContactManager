@@ -1,0 +1,45 @@
+{% extends "core/base.html" %}
+{% block content %}
+<div class="md-4">  
+    <form method="get" action="." class="mt-6">
+        <input type="text" name="query" value="{{ request.GET.query|default:'' }}" class=" w-full py-4 px-6  rounded-xl bg-emerald-500 hover:bg-emerald-800 text-white" placeholder="Search contacts">
+    </form>
+</div>
+    <div class="space-y-4">
+        {% for contact in contacts %}
+            <div class="bg-gray-500 rounded-xl p-6 mb-4 mt-6 text-center">
+                <h2 class="mb-2 text-2xl font-bold">{{ contact.first_name }} {{ contact.last_name }}</h2>
+                <h3 class="mb-4 text-sm text-gray-900">{{ contact.catagory.title }}</h3>
+
+                <div class="text-left inline-block">
+                    {% if contact.emails.all %}
+                        <p class="list-disc list-inside text-center">
+                            {% for email in contact.emails.all %}
+                                {{ email.email }}
+                            {% endfor %}
+                        </p>
+                    {% endif %}
+
+                    {% if contact.phones.all %}
+                        <p class="list-disc list-inside text-center">
+                            {% for phone in contact.phones.all %}
+                                {{ phone.phone_number }}
+                            {% endfor %}
+                        </p>
+                    {% endif %}
+                </div>
+
+                <p class="mt-2">{{ contact.address }}</p>
+                <div class="mt-6">
+                    <a href="{% url 'edit_contact' contact.id %}" class="px-5 py-2 bg-blue-500 hover:bg-blue-700 text-white text-xl rounded-xl">Edit</a>
+                    <a href="{% url 'delete_contact' contact.id %}" class="px-5 py-2 bg-red-500 hover:bg-red-700 text-white text-xl rounded-xl">Delete</a>
+
+                </div>
+            </div>
+        {% empty %}
+        <div class="bg-gray-500 rounded-xl p-6 mb-4 mt-6 text-center">
+            <p>No contacts available.</p>
+        </div>
+        {% endfor %}
+    </div>
+{% endblock %}

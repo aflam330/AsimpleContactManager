@@ -1,0 +1,102 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+<div class="bg-gray-400 rounded-xl">
+    <form method="post" action="." class="p-6 space-y-4">
+        {% csrf_token %}
+
+        {% if error %}
+        <div class="p-4 mb-4 bg-red-500 text-white rounded-xl">
+            {{ error }}
+        </div>
+        {% endif %}
+
+        <div>
+            <label for="category">Category</label><br />
+            <select id="category" name="category" required class="w-full py-4 px-6  rounded-xl bg-gray-700 hover:bg-gray-800 text-white">
+                <option value="">Select a category</option>
+                {% for cat in category %}
+                    <option value="{{ cat.id }}">{{ cat.title }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <label for="first_name">First Name</label><br />
+            <input id="first_name" type="text" name="first_name" placeholder="First name" title="First name" class="w-full py-4 px-6  rounded-xl bg-gray-700 hover:bg-gray-800 text-white"/>
+        </div>
+        <div>
+            <label for="last_name">Last Name</label><br />
+            <input id="last_name" type="text" name="last_name" placeholder="Last name" title="Last name" class="w-full py-4 px-6  rounded-xl bg-gray-700 hover:bg-gray-800 text-white"/>
+        </div>
+        <div>
+            <label class="block">Emails</label>
+            <div id="email-fields" class="space-y-3">
+                <div class="flex gap-2 email-row">
+                    <input type="email" name="emails" class="flex-1 py-4 px-6 rounded-xl bg-gray-700 hover:bg-gray-800 text-white" placeholder="Email" />
+                    <button type="button" class="remove-email px-4 py-2 bg-red-500 hover:bg-red-700 text-white rounded-xl hidden">Remove</button>
+                </div>
+            </div>
+            
+        </div>
+        <div>
+            <label class="block">Phone Numbers</label>
+            <div id="phone-fields" class="space-y-3">
+                <div class="flex gap-2 phone-row">
+                    <input type="text" name="phone_numbers" class="flex-1 py-4 px-6 rounded-xl bg-gray-700 hover:bg-gray-800 text-white" placeholder="Phone number" />
+                    <button type="button" class="remove-phone px-4 py-2 bg-red-500 hover:bg-red-700 text-white rounded-xl hidden">Remove</button>
+                </div>
+            </div>
+            
+        </div>
+        <div>
+            <label for="address">Address</label><br />
+            <input id="address" type="text" name="address" placeholder="Address" title="Address" class="w-full py-4 px-6  rounded-xl bg-gray-700 hover:bg-gray-800 text-white"/>
+        </div>
+        <div>
+            <button type="submit" class="px-4 py-2 bg-emerald-400 hover:bg-emerald-700 text-white text-xl rounded-xl">Submit</button>
+        </div>
+    </form>
+</div>
+<script>
+  function initDynamicFields(containerId, rowClass, removeClass, addButtonId, inputName, placeholderText) {
+    const container = document.getElementById(containerId);
+    const addButton = document.getElementById(addButtonId);
+
+    function updateRemoveButtons() {
+      const rows = container.querySelectorAll('.' + rowClass);
+      rows.forEach((row) => {
+        const removeBtn = row.querySelector('.' + removeClass);
+        if (removeBtn) {
+          removeBtn.classList.toggle('hidden', rows.length === 1);
+          removeBtn.onclick = function () {
+            if (container.querySelectorAll('.' + rowClass).length > 1) {
+              row.remove();
+              updateRemoveButtons();
+            }
+          };
+        }
+      });
+    }
+
+    if (addButton) {
+      addButton.addEventListener('click', function () {
+        const newRow = document.createElement('div');
+        newRow.className = 'flex gap-2 ' + rowClass;
+        newRow.innerHTML = `
+          <input type="${inputName === 'emails' ? 'email' : 'text'}" name="${inputName}" placeholder="${placeholderText}" class="flex-1 py-4 px-6 rounded-xl bg-gray-700 hover:bg-gray-800 text-white" />
+          <button type="button" class="${removeClass} px-4 py-2 bg-red-500 hover:bg-red-700 text-white rounded-xl">Remove</button>
+        `;
+        container.appendChild(newRow);
+        updateRemoveButtons();
+      });
+    }
+
+    updateRemoveButtons();
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    initDynamicFields('email-fields', 'email-row', 'remove-email', 'add-email', 'emails', 'Email');
+    initDynamicFields('phone-fields', 'phone-row', 'remove-phone', 'add-phone', 'phone_numbers', 'Phone number');
+  });
+</script>
+{% endblock %}

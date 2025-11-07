@@ -1,0 +1,39 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+<div class="max-w-md mx-auto bg-gray-400 rounded-xl p-6 mt-10">
+  <h2 class="text-2xl font-semibold text-center text-white mb-4">Log in</h2>
+  <form method="post" class="space-y-4">
+    {% csrf_token %}
+    {% if form.non_field_errors %}
+      <div class="p-3 bg-red-500 text-white rounded-xl">
+        {{ form.non_field_errors }}
+      </div>
+    {% endif %}
+
+    <div>
+      <label class="block text-white mb-1" for="id_username">Username</label>
+      <input type="text" name="username" autofocus required id="id_username" value="{{ form.username.value|default:'' }}" class="w-full py-3 px-4 rounded-xl bg-gray-700 text-white" />
+      {% if form.username.errors %}
+        <p class="text-sm text-red-200 mt-1">{{ form.username.errors.0 }}</p>
+      {% endif %}
+    </div>
+
+    <div>
+      <label class="block text-white mb-1" for="id_password">Password</label>
+      <input type="password" name="password" required id="id_password" class="w-full py-3 px-4 rounded-xl bg-gray-700 text-white" />
+      {% if form.password.errors %}
+        <p class="text-sm text-red-200 mt-1">{{ form.password.errors.0 }}</p>
+      {% endif %}
+    </div>
+
+    <button type="submit" class="w-full py-3 bg-emerald-500 hover:bg-emerald-700 text-white rounded-xl">Log in</button>
+  </form>
+
+  <p class="text-center text-white mt-4">
+    Need an account?
+    <a href="{% url 'signup' %}" class="text-blue-800 underline">Sign up</a>
+  </p>
+</div>
+{% endblock %}
+
